@@ -3,10 +3,12 @@ import {TaskType} from "./App";
 
 type TodolistPropsType = {
     title: string
-    tasks: Array<TaskType>;
+    tasks: Array<TaskType>
+    remoteTask: (taskId: number) => void
 }
 
 const Todolist: FC<TodolistPropsType> = (props) => {
+
     let isAllTasrsIsNotDane = true
     for (let i = 0; i < props.tasks.length; i++) {
         if (props.tasks[i].isDone) {
@@ -15,6 +17,19 @@ const Todolist: FC<TodolistPropsType> = (props) => {
         }
     }
     const todoClass = isAllTasrsIsNotDane ? "todolist-empty" : "todolist"
+
+    const todoListItems = props.tasks.map((task) => {
+        return (
+            <li>
+                <input type="checkbox" checked={task.isDone}/>
+                <span>{task.title}</span>
+                <button onClick={() => {
+                    props.remoteTask(task.id)
+                }}>x</button>
+            </li>
+        )
+    })
+
     return (
         <div className={todoClass}>
             <h3>{props.title}</h3>
@@ -23,15 +38,7 @@ const Todolist: FC<TodolistPropsType> = (props) => {
                 <button>+</button>
             </div>
             <ul>
-                <li>
-                    <input type="checkbox" checked={props.tasks[0].isDone}/>
-                    <span>{props.tasks[0].title}</span></li>
-                <li>
-                    <input type="checkbox" checked={props.tasks[1].isDone}/>
-                    <span>{props.tasks[1].title}</span></li>
-                <li>
-                    <input type="checkbox" checked={props.tasks[2].isDone}/>
-                    <span>{props.tasks[2].title}</span></li>
+                {todoListItems}
             </ul>
             <div>
                 <button>All</button>
@@ -40,6 +47,5 @@ const Todolist: FC<TodolistPropsType> = (props) => {
             </div>
         </div>
     );
-};
-
+}
 export default Todolist;
