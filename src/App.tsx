@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import './App.css';
 import Todolist from "./Todolist";
-import {type} from "os";
 import {v1} from "uuid";
 
 export type FilterVuluesType = "All" | "Active" | "Completed"
@@ -19,39 +18,42 @@ function App(): JSX.Element {
         {id: v1(), title: "ES6/TS", isDone: false},
         {id: v1(), title: "Redax", isDone: false},
     ])
-    const addTask = (title:string) => {
-        const newTask:TaskType = {
-         id: v1(), title: title, isDone: true
-        }
-      setTasks([newTask,...tasks])
-    }
-
     const [filter, setFilter] = useState<FilterVuluesType>("All")
 
-    const changeTodoListFilter = (filter: FilterVuluesType) =>
-    {
+    const changeTodoListFilter = (filter: FilterVuluesType) => {
         setFilter(filter)
-
     }
-    let taskForRender: Array<TaskType> = []
-    if (filter === "All") {
-        taskForRender = tasks
+    const addTask = (title: string) => {
+        const newTask: TaskType = {
+            id: v1(), title: title, isDone: true
+        }
+        setTasks([newTask, ...tasks])
     }
-    if (filter === "Active") {
-        taskForRender = tasks.filter((t) => !t.isDone)
-    }
-    if (filter === "Completed") {
-        taskForRender = tasks.filter((t) => t.isDone)
-    }
-
     const remoteTask = (taskId: string) => {
         setTasks(tasks.filter(task => task.id !== taskId))
         console.log(tasks)
     }
+    const changeTaskStatus = (taskId: string, newisDone: boolean) => {
+        setTasks(tasks.map(t => t.id === taskId ? {...t, isDone: newisDone} : t))
+    }
+
+    const getFiltredTaskForRender = (taskslist: Array<TaskType>, filterValue: FilterVuluesType) => {
+        switch (filterValue) {
+            case "Active":
+                return  taskslist.filter((t) => !t.isDone)
+            case "Completed":
+                return  taskslist.filter((t) => t.isDone)
+            default:
+                return  taskslist
+        }
+    }
+    let taskForRender: Array<TaskType> = getFiltredTaskForRender(tasks, filter)
 
     return (
         <div className="App">
             <Todolist
+                filter={filter}
+                changeTaskStatus={changeTaskStatus}
                 remoteTask={remoteTask}
                 title={"Whats to learn"}
                 tasks={taskForRender}
