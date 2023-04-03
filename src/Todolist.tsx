@@ -4,11 +4,13 @@ import {FilterVuluesType, TaskType} from "./App";
 type TodolistPropsType = {
     title: string
     tasks: Array<TaskType>
-    remoteTask: (taskId: string) => void
-    changeTodoListFilter: (filter: FilterVuluesType) => void
+    remoteTask: (taskId: string, todlistId: string) => void
+    changeTodoListFilter: (filter: FilterVuluesType, todlistId: string) => void
     filter: FilterVuluesType
-    changeTaskStatus: (taskId: string, newisDone:boolean) => void
-    addTask: (title: string) => void
+    changeTaskStatus: (taskId: string, newisDone:boolean, todlistId: string) => void
+    addTask: (title: string, todlistId: string) => void
+    todlistId: string
+    removeTodoLists:(todlistId: string)=>void
 }
 
 const Todolist: FC<TodolistPropsType> = (props) => {
@@ -37,8 +39,8 @@ const Todolist: FC<TodolistPropsType> = (props) => {
             e.key === "Enter" && addTask()
         }
     const todoListItems = props.tasks.map((task) => {
-        const removeTaskHandler = () => props.remoteTask(task.id)
-        const changeTaskStatus = (e:ChangeEvent<HTMLInputElement>) => props.changeTaskStatus(task.id, e.currentTarget.checked)
+        const removeTaskHandler = () => props.remoteTask(task.id,props.todlistId)
+        const changeTaskStatus = (e:ChangeEvent<HTMLInputElement>) => props.changeTaskStatus(task.id, e.currentTarget.checked,props.todlistId)
 
         return (
             <li>
@@ -54,7 +56,7 @@ const Todolist: FC<TodolistPropsType> = (props) => {
     const addTask = () => {
         const trimmedTitle= title.trim()
         if(trimmedTitle){
-            props.addTask(trimmedTitle)
+            props.addTask(trimmedTitle,props.todlistId)
         } else {setError(true)}
         setTitle("")
     }
@@ -64,6 +66,7 @@ const Todolist: FC<TodolistPropsType> = (props) => {
     return (
         <div className={todoClass}>
             <h3>{props.title}</h3>
+            <button onClick={()=>props.removeTodoLists(props.todlistId)}>x</button>
             <div>
                 <input
                     onKeyDown={onKeyDownAddTaskHandler}
@@ -87,21 +90,21 @@ const Todolist: FC<TodolistPropsType> = (props) => {
                 <button
                     className={props.filter==='All'?'btn-active' : ""}
                     onClick={() => {
-                    props.changeTodoListFilter("All")
+                    props.changeTodoListFilter("All",props.todlistId)
                 }}>
                     All
                 </button>
                 <button
                     className={props.filter==='Active'?'btn-active' : ""}
                     onClick={() => {
-                    props.changeTodoListFilter("Active")
+                    props.changeTodoListFilter("Active",props.todlistId)
                 }}>
                     Active
                 </button>
                 <button
                     className={props.filter==='Completed'?'btn-active' : ""}
                     onClick={() => {
-                    props.changeTodoListFilter("Completed")
+                    props.changeTodoListFilter("Completed",props.todlistId)
                 }}>
                     Completed
                 </button>
