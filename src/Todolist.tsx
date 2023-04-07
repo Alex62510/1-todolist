@@ -1,46 +1,32 @@
-import React, {ChangeEvent, KeyboardEvent, FC, useState} from 'react';
+import React, {ChangeEvent, FC, KeyboardEvent, useState} from 'react';
 import {FilterVuluesType, TaskType} from "./App";
+import {AddItemForm} from "./AddItemForm";
 
 type TodolistPropsType = {
     title: string
     tasks: Array<TaskType>
-    remoteTask: (taskId: string, todlistId: string) => void
-    changeTodoListFilter: (filter: FilterVuluesType, todlistId: string) => void
+    remoteTask: (taskId: string, todolistId: string) => void
+    changeTodoListFilter: (filter: FilterVuluesType, todolistId: string) => void
     filter: FilterVuluesType
-    changeTaskStatus: (taskId: string, newisDone:boolean, todlistId: string) => void
-    addTask: (title: string, todlistId: string) => void
-    todlistId: string
-    removeTodoLists:(todlistId: string)=>void
+    changeTaskStatus: (taskId: string, newIsDone:boolean, todolistId: string) => void
+    addTask: (title: string, todolistId: string) => void
+    todolistId: string
+    removeTodoLists:(todolistId: string)=>void
 }
 
 const Todolist: FC<TodolistPropsType> = (props) => {
-    const [title, setTitle] = useState<string>("")
-    const [error, setError]= useState<boolean>(false)
-
-    let isAllTasrsIsNotDane = true
+    let isAllTasksIsNotDane = true
     for (let i = 0; i < props.tasks.length; i++) {
         if (props.tasks[i].isDone) {
-            isAllTasrsIsNotDane = false
+            isAllTasksIsNotDane = false
             break;
         }
     }
-    const todoClass = isAllTasrsIsNotDane ? "todolist-empty" : "todolist"
+    const todoClass = isAllTasksIsNotDane ? "todolist-empty" : "todolist"
 
-    const maxTitlelength = 20
-    const recommendingTitlelength = 10
-    const isAddTaskNotPossible = title.length === 0 || title.length > maxTitlelength
-
-    const setLocalTitleHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        error && setError(false)
-        setTitle(e.currentTarget.value)
-    }
-    const onKeyDownAddTaskHandler = isAddTaskNotPossible
-        ? undefined : (e: KeyboardEvent<HTMLInputElement>) => {
-            e.key === "Enter" && addTask()
-        }
     const todoListItems = props.tasks.map((task) => {
-        const removeTaskHandler = () => props.remoteTask(task.id,props.todlistId)
-        const changeTaskStatus = (e:ChangeEvent<HTMLInputElement>) => props.changeTaskStatus(task.id, e.currentTarget.checked,props.todlistId)
+        const removeTaskHandler = () => props.remoteTask(task.id,props.todolistId)
+        const changeTaskStatus = (e:ChangeEvent<HTMLInputElement>) => props.changeTaskStatus(task.id, e.currentTarget.checked,props.todolistId)
 
         return (
             <li>
@@ -53,36 +39,11 @@ const Todolist: FC<TodolistPropsType> = (props) => {
             </li>
         )
     })
-    const addTask = () => {
-        const trimmedTitle= title.trim()
-        if(trimmedTitle){
-            props.addTask(trimmedTitle,props.todlistId)
-        } else {setError(true)}
-        setTitle("")
-    }
-    const longTaskTitleWarning = (title.length > recommendingTitlelength && title.length < maxTitlelength) &&
-        <div style={{color: "hotpink"}}>title must be shorter</div>
-    const longTaskTitleError = title.length > maxTitlelength && <div style={{color: "red"}}>STOOP!!!</div>
     return (
         <div className={todoClass}>
             <h3>{props.title}</h3>
-            <button onClick={()=>props.removeTodoLists(props.todlistId)}>x</button>
-            <div>
-                <input
-                    onKeyDown={onKeyDownAddTaskHandler}
-                    placeholder={"Enter title please"}
-                    value={title}
-                    onChange={setLocalTitleHandler}
-                    className={error ? 'input-error' : ""}
-                />
-
-                <button
-                    disabled={isAddTaskNotPossible}
-                    onClick={addTask}>+
-                </button>
-                {longTaskTitleWarning}
-                {longTaskTitleError}
-            </div>
+            <button onClick={()=>props.removeTodoLists(props.todolistId)}>x</button>
+            <AddItemForm todolistId={props.todolistId} addTask={props.addTask}/>
             <ul>
                 {todoListItems}
             </ul>
@@ -90,21 +51,21 @@ const Todolist: FC<TodolistPropsType> = (props) => {
                 <button
                     className={props.filter==='All'?'btn-active' : ""}
                     onClick={() => {
-                    props.changeTodoListFilter("All",props.todlistId)
+                    props.changeTodoListFilter("All",props.todolistId)
                 }}>
                     All
                 </button>
                 <button
                     className={props.filter==='Active'?'btn-active' : ""}
                     onClick={() => {
-                    props.changeTodoListFilter("Active",props.todlistId)
+                    props.changeTodoListFilter("Active",props.todolistId)
                 }}>
                     Active
                 </button>
                 <button
                     className={props.filter==='Completed'?'btn-active' : ""}
                     onClick={() => {
-                    props.changeTodoListFilter("Completed",props.todlistId)
+                    props.changeTodoListFilter("Completed",props.todolistId)
                 }}>
                     Completed
                 </button>
@@ -112,4 +73,6 @@ const Todolist: FC<TodolistPropsType> = (props) => {
         </div>
     );
 }
+
+
 export default Todolist;

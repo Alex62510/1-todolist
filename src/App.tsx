@@ -22,7 +22,7 @@ type TaskStateType = {
 function App(): JSX.Element {
     const TodolistId_1 = v1()
     const TodolistId_2 = v1()
-
+debugger
     const [todoLists, setTodolists] = useState<Array<TodolistType>>([
         {id: TodolistId_1, title: "Whats to learn", filter: "All"},
         {id: TodolistId_2, title: "Whats to buy", filter: "Active"},
@@ -76,7 +76,7 @@ function App(): JSX.Element {
         return (
             <Todolist
                 key={t.id}
-                todlistId={t.id}
+                todolistId={t.id}
                 filter={t.filter}
                 changeTaskStatus={changeTaskStatus}
                 remoteTask={remoteTask}
