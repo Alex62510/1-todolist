@@ -98,6 +98,7 @@ function App(): JSX.Element {
 
                 changeTodoListFilter={changeTodoListFilter}
                 removeTodoLists={removeTodoLists}
+                changeTodolistTitle={changeTodoListTitle}
 
                 changeTaskStatus={changeTaskStatus}
                 remoteTask={remoteTask}

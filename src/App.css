@@ -11,6 +11,7 @@
   border-radius: 5px;
   padding: 20px;
   background-color: darkslateblue;
+  height: max-content;
 }.todolist-empty {
   border: 2px solid hotpink;
   border-radius: 5px;

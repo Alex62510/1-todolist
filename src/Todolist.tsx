@@ -13,7 +13,9 @@ type TodolistPropsType = {
     addTask: (title: string, todolistId: string) => void
     todolistId: string
     removeTodoLists: (todolistId: string) => void
-    changeTaskTitle:(taskId: string, title: string, todlistId: string)=>void
+    changeTaskTitle:(taskId: string, title: string, todolistId: string)=>void
+    changeTodolistTitle:(title: string, todolistId: string )=>void
+
 }
 
 
@@ -29,6 +31,9 @@ const Todolist: FC<TodolistPropsType> = (props) => {
 
     const addItem = (title: string) => {
         props.addTask(title, props.todolistId)
+    }
+    const changeTodolistTitle=(title:string)=>{
+        props.changeTodolistTitle(title,props.todolistId)
     }
     const todoListItems = props.tasks.map((task) => {
         const removeTaskHandler = () => props.remoteTask(task.id, props.todolistId)
@@ -56,7 +61,7 @@ const Todolist: FC<TodolistPropsType> = (props) => {
     })
     return (
         <div className={todoClass}>
-            <h3>{props.title}</h3>
+            <h3><EditableSpan title={props.title} changeTaskTitleSpan={changeTodolistTitle}/></h3>
             <button onClick={() => props.removeTodoLists(props.todolistId)}>x</button>
             <AddItemForm addNewItem={addItem}/>
             <ul>
