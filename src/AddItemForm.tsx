@@ -1,30 +1,29 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from "react";
 
 type AddItemFormType={
-    todolistId:string
-    addTask:(title: string, todolistId: string) => void
+    addNewItem:(title: string) => void
 
 }
 export const AddItemForm = (props:AddItemFormType) => {
     const [title, setTitle] = useState<string>("")
     const [error, setError]= useState<boolean>(false)
-    const addTask = () => {
+    const addItem = () => {
         const trimmedTitle= title.trim()
         if(trimmedTitle){
-            props.addTask(trimmedTitle,props.todolistId)
+            props.addNewItem(trimmedTitle)
         } else {setError(true)}
         setTitle("")
     }
-    const setLocalTitleHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    const setLocalItemHandler = (e: ChangeEvent<HTMLInputElement>) => {
         error && setError(false)
         setTitle(e.currentTarget.value)
     }
     const maxTitlelength = 20
     const recommendingTitlelength = 10
-    const isAddTaskNotPossible = title.length === 0 || title.length > maxTitlelength
-    const onKeyDownAddTaskHandler = isAddTaskNotPossible
+    const isAddItemNotPossible = title.length === 0 || title.length > maxTitlelength
+    const onKeyDownAddItemHandler = isAddItemNotPossible
         ? undefined : (e: KeyboardEvent<HTMLInputElement>) => {
-            e.key === "Enter" && addTask()
+            e.key === "Enter" && addItem()
         }
     const longTaskTitleError = title.length > maxTitlelength && <div style={{color: "red"}}>STOOP!!!</div>
     const longTaskTitleWarning = (title.length > recommendingTitlelength && title.length < maxTitlelength) &&
@@ -32,16 +31,16 @@ export const AddItemForm = (props:AddItemFormType) => {
     return (
         <div>
             <input
-                onKeyDown={onKeyDownAddTaskHandler}
+                onKeyDown={onKeyDownAddItemHandler}
                 placeholder={"Enter title please"}
                 value={title}
-                onChange={setLocalTitleHandler}
+                onChange={setLocalItemHandler}
                 className={error ? 'input-error' : ""}
             />
 
             <button
-                disabled={isAddTaskNotPossible}
-                onClick={addTask}>+
+                disabled={isAddItemNotPossible}
+                onClick={addItem}>+
             </button>
             {longTaskTitleWarning}
             {longTaskTitleError}
