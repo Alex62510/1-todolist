@@ -1,17 +1,22 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from "react";
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
-type AddItemFormType={
-    addNewItem:(title: string) => void
+import {IconButton, TextField} from "@mui/material";
+
+type AddItemFormType = {
+    addNewItem: (title: string) => void
 
 }
-export const AddItemForm = (props:AddItemFormType) => {
+export const AddItemForm = (props: AddItemFormType) => {
     const [title, setTitle] = useState<string>("")
-    const [error, setError]= useState<boolean>(false)
+    const [error, setError] = useState<boolean>(false)
     const addItem = () => {
-        const trimmedTitle= title.trim()
-        if(trimmedTitle){
+        const trimmedTitle = title.trim()
+        if (trimmedTitle) {
             props.addNewItem(trimmedTitle)
-        } else {setError(true)}
+        } else {
+            setError(true)
+        }
         setTitle("")
     }
     const setLocalItemHandler = (e: ChangeEvent<HTMLInputElement>) => {
@@ -29,21 +34,21 @@ export const AddItemForm = (props:AddItemFormType) => {
     const longTaskTitleWarning = (title.length > recommendingTitlelength && title.length < maxTitlelength) &&
         <div style={{color: "hotpink"}}>title must be shorter</div>
     return (
-        <div>
-            <input
+        <div className={'add-form'}>
+            <TextField
                 onKeyDown={onKeyDownAddItemHandler}
                 placeholder={"Enter title please"}
                 value={title}
                 onChange={setLocalItemHandler}
-                className={error ? 'input-error' : ""}
+                error={error}
+               size={"small"}
+                helperText={longTaskTitleError||longTaskTitleWarning}
             />
-
-            <button
+            <IconButton
                 disabled={isAddItemNotPossible}
-                onClick={addItem}>+
-            </button>
-            {longTaskTitleWarning}
-            {longTaskTitleError}
+                onClick={addItem}>
+                <AddCircleIcon/>
+            </IconButton>
         </div>
     )
 }

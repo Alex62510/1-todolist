@@ -7,12 +7,14 @@
   margin-right: 50px;
 }
 .todolist {
+  width: 280px;
   border: 2px solid hotpink;
   border-radius: 5px;
   padding: 20px;
   background-color: darkslateblue;
   height: max-content;
 }.todolist-empty {
+   width: 280px;
   border: 2px solid hotpink;
   border-radius: 5px;
   padding: 20px;
@@ -34,4 +36,13 @@
 .input-error {
   outline: none;
   border: 2px solid red;
+}
+.btn-filter-container {
+  display: flex;
+  justify-content: space-between;
+}
+.add-form {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
 }
