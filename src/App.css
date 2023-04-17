@@ -7,18 +7,17 @@
 /*  margin-right: 50px;*/
 }
 .todolist {
-  width: 280px;
   border: 2px solid hotpink;
   border-radius: 5px;
   padding: 20px;
-  background-color: #b6a81e;
+  /*background-color: #800057;*/
   height: max-content;
 }.todolist-empty {
-   width: 280px;
+
   border: 2px solid hotpink;
   border-radius: 5px;
   padding: 20px;
-  background-color: #6aff2f;
+  background-color: #362fff;
 }
 .task {
   font-weight: bold;

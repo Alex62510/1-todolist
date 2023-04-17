@@ -3,8 +3,20 @@ import './App.css';
 import Todolist from "./Todolist";
 import {v1} from "uuid";
 import {AddItemForm} from "./AddItemForm";
-import {AppBar, Button, Container, Grid, IconButton, Toolbar, Typography} from "@mui/material";
+import {
+    AppBar,
+    Button, Checkbox,
+    Container,
+    createTheme, CssBaseline, FormControlLabel, FormGroup,
+    Grid,
+    IconButton,
+    Paper,
+    ThemeProvider,
+    Toolbar,
+    Typography
+} from "@mui/material";
 import {Menu} from "@mui/icons-material";
+import {deepPurple, green} from "@mui/material/colors";
 
 export type FilterVuluesType = "All" | "Active" | "Completed"
 export type TaskType = {
@@ -30,7 +42,6 @@ function App(): JSX.Element {
         {id: TodolistId_1, title: "Whats to learn", filter: "All"},
         {id: TodolistId_2, title: "Whats to buy", filter: "All"},
     ])
-
     const [tasks, setTasks] = useState<TaskStateType>({
 
         [TodolistId_1]: [
@@ -46,6 +57,8 @@ function App(): JSX.Element {
             {id: v1(), title: "BEER", isDone: false}
         ]
     })
+    const [isDarkMode, setIsDarkMode] = useState<boolean>(true)
+
     const addTask = (title: string, todolistId: string) => {
         const newTask: TaskType = {id: v1(), title: title, isDone: true}
         setTasks({...tasks, [todolistId]: [newTask, ...tasks[todolistId]]})
@@ -91,59 +104,74 @@ function App(): JSX.Element {
         let taskForRender: Array<TaskType> = getFiltredTaskForRender(tasks[t.id], t.filter)
         return (
             <Grid item>
-                <Todolist
-                    key={t.id}
-                    todolistId={t.id}
-                    filter={t.filter}
-                    title={t.title}
-                    tasks={taskForRender}
+                <Paper elevation={8}>
+                    <Todolist
+                        key={t.id}
+                        todolistId={t.id}
+                        filter={t.filter}
+                        title={t.title}
+                        tasks={taskForRender}
 
-                    changeTodoListFilter={changeTodoListFilter}
-                    removeTodoLists={removeTodoLists}
-                    changeTodolistTitle={changeTodoListTitle}
+                        changeTodoListFilter={changeTodoListFilter}
+                        removeTodoLists={removeTodoLists}
+                        changeTodolistTitle={changeTodoListTitle}
 
-                    changeTaskStatus={changeTaskStatus}
-                    remoteTask={remoteTask}
-                    addTask={addTask}
-                    changeTaskTitle={changeTaskTitle}
-                />
+                        changeTaskStatus={changeTaskStatus}
+                        remoteTask={remoteTask}
+                        addTask={addTask}
+                        changeTaskTitle={changeTaskTitle}
+                    />
+                </Paper>
             </Grid>
-            )
+        )
+    })
+    const mode = isDarkMode ? "dark" : "light"
+    const customTheme = createTheme({
+        palette: {
+            primary: deepPurple,
+            secondary: green,
+            mode: mode
+        }
     })
     return (
-        <div className="App">
-            <AppBar position="static">
-                <Toolbar>
-                    <IconButton
-                        size="large"
-                        edge="start"
-                        color="inherit"
-                        aria-label="menu"
-                        sx={{mr: 2}}
-                    >
-                        <Menu/>
-                    </IconButton>
-                    <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
-                        Todolists
-                    </Typography>
-                    {/*<FormGroup>*/}
-                    {/*    <FormControlLabel*/}
+        <ThemeProvider theme={customTheme}>
+            <CssBaseline/>
+            <div className="App">
+                <AppBar position="static">
+                    <Toolbar>
+                        <IconButton
+                            size="large"
+                            edge="start"
+                            color="inherit"
+                            aria-label="menu"
+                            sx={{mr: 2}}
+                        >
+                            <Menu/>
+                        </IconButton>
+                        <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
+                            Todolists
+                        </Typography>
+                        <FormGroup>
+                            <FormControlLabel
+                                control={<Checkbox onChange={(e) => setIsDarkMode(e.currentTarget.checked)}/>}
+                                label={isDarkMode ? "Dark mode off" : "Dark mode on" }
+                            />
+                        </FormGroup>
+                        <Button color="inherit">Login</Button>
+                    </Toolbar>
+                </AppBar>
+                <Container fixed>
+                    <Grid container sx={{p: "15px 0px"}}>
+                        <AddItemForm addNewItem={addTodolist}/>
+                    </Grid>
+                    <Grid container spacing={4}>
+                        {todolistsComponents}
+                    </Grid>
+                </Container>
 
-                    {/*    />*/}
-                    {/*</FormGroup>*/}
-                    <Button color="inherit">Login</Button>
-                </Toolbar>
-            </AppBar>
-            <Container fixed>
-                <Grid container sx={{p:"15px 0px"}}>
-                    <AddItemForm addNewItem={addTodolist}/>
-                </Grid>
-                <Grid container spacing={4}>
-                {todolistsComponents}
-                </Grid>
-            </Container>
+            </div>
+        </ThemeProvider>
 
-        </div>
     )
 }
 
