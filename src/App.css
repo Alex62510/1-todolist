@@ -1,24 +1,24 @@
 .App {
-  padding: 30px;
-  display: flex;
-}
+/*  padding: 30px;*/
+/*  display: flex;*/
+/*}*/
 
-.App > div {
-  margin-right: 50px;
+/*.App > div {*/
+/*  margin-right: 50px;*/
 }
 .todolist {
   width: 280px;
   border: 2px solid hotpink;
   border-radius: 5px;
   padding: 20px;
-  background-color: darkslateblue;
+  background-color: #b6a81e;
   height: max-content;
 }.todolist-empty {
    width: 280px;
   border: 2px solid hotpink;
   border-radius: 5px;
   padding: 20px;
-  background-color: brown;
+  background-color: #6aff2f;
 }
 .task {
   font-weight: bold;
