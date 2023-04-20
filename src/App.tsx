@@ -58,7 +58,7 @@ function App(): JSX.Element {
         ]
     })
     const [isDarkMode, setIsDarkMode] = useState<boolean>(true)
-
+//tasks
     const addTask = (title: string, todolistId: string) => {
         const newTask: TaskType = {id: v1(), title: title, isDone: true}
         setTasks({...tasks, [todolistId]: [newTask, ...tasks[todolistId]]})
@@ -73,6 +73,8 @@ function App(): JSX.Element {
     const changeTaskTitle = (taskId: string, newTitle: string, todolistId: string) => {
         setTasks({...tasks, [todolistId]: tasks[todolistId].map(t => t.id === taskId ? {...t, title: newTitle} : t)})
     }
+
+//todolist
     const changeTodoListFilter = (filter: FilterVuluesType, todolistId: string) => {
         setTodolists(todoLists.map(t => t.id === todolistId ? {...t, filter: filter} : t))
     }
@@ -85,7 +87,11 @@ function App(): JSX.Element {
         setTodolists([...todoLists, newTodolist])
         setTasks({...tasks, [newTodolistId]: []})
     }
-
+    const removeTodoLists = (todolistId: string) => {
+        setTodolists(todoLists.filter(t => t.id !== todolistId))
+        delete tasks[todolistId]
+    }
+//UI
     const getFiltredTaskForRender = (taskslist: Array<TaskType>, filterValue: FilterVuluesType) => {
         switch (filterValue) {
             case "Active":
@@ -96,10 +102,8 @@ function App(): JSX.Element {
                 return taskslist
         }
     }
-    const removeTodoLists = (todolistId: string) => {
-        setTodolists(todoLists.filter(t => t.id !== todolistId))
-        delete tasks[todolistId]
-    }
+
+
     const todolistsComponents = todoLists.map(t => {
         let taskForRender: Array<TaskType> = getFiltredTaskForRender(tasks[t.id], t.filter)
         return (
