@@ -36,9 +36,6 @@ export const TodolistsReducer = (todolists: Array<TodolistType>, action: Action)
         default:
             return todolists
     }
-
-
-    return todolists
 }
 export const RemoveTodoListAC=(id:string):RemoveTodolistAt=> {
     return {
