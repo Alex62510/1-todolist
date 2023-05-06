@@ -105,7 +105,7 @@ function AppWithReducers(): JSX.Element {
         dicpatchToTodolists(action)
         dispatchTasks(action)
     }
-//UI
+
     const getFiltredTaskForRender = (taskslist: Array<TaskType>, filterValue: FilterVuluesType) => {
         switch (filterValue) {
             case "Active":
