@@ -1,9 +1,9 @@
 import React, {ChangeEvent, FC} from 'react';
-import {FilterVuluesType, TaskType} from "./App";
 import {AddItemForm} from "./AddItemForm";
 import EditableSpan from "./EditableSpan";
 import {Button, Checkbox, IconButton, List, ListItem, Typography} from "@mui/material";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import {FilterVuluesType, TaskType} from "./AppWithReducers";
 
 
 type TodolistPropsType = {

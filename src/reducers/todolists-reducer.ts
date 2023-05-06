@@ -1,5 +1,6 @@
-import {FilterVuluesType, TodolistType} from "../App";
+
 import {v1} from "uuid";
+import {FilterVuluesType, TodolistType} from "../AppWithReducers";
 
 export type RemoveTodolistAt = {
     type: "REMOVE-TODOLIST"
@@ -20,9 +21,9 @@ export type ChangeTodolistFilterAT = {
     filter: FilterVuluesType
     id: string
 }
-type Action = RemoveTodolistAt | AddTodolistAt | ChangeTodolistTitleAT | ChangeTodolistFilterAT
+export type TodolistAction = RemoveTodolistAt | AddTodolistAt | ChangeTodolistTitleAT | ChangeTodolistFilterAT
 
-export const TodolistsReducer = (todolists: Array<TodolistType>, action: Action): Array<TodolistType> => {
+export const TodolistsReducer = (todolists: Array<TodolistType>, action: TodolistAction): Array<TodolistType> => {
     switch (action.type) {
         case "REMOVE-TODOLIST":
             return todolists.filter(t => t.id !== action.id)
