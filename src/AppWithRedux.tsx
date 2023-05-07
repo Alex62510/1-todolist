@@ -32,6 +32,8 @@ import {
     TaskAction,
     tasksReducer
 } from "./reducers/tasks-reducer";
+import {useDispatch, useSelector} from "react-redux";
+import {AppRootStateType} from "./reducers/store";
 
 export type FilterVuluesType = "All" | "Active" | "Completed"
 export type TaskType = {
@@ -49,61 +51,43 @@ export type TaskStateType = {
     [todolistId: string]: Array<TaskType>
 }
 
-function AppWithReducers(): JSX.Element {
+function AppWithRedux(): JSX.Element {
     const TodolistId_1 = v1()
     const TodolistId_2 = v1()
 
-    const [todoLists, dicpatchToTodolists] = useReducer<Reducer<Array<TodolistType>, TodolistAction>>(TodolistsReducer,[
-        {id: TodolistId_1, title: "Whats to learn", filter: "All"},
-        {id: TodolistId_2, title: "Whats to buy", filter: "All"},
-    ])
-    const [tasks, dispatchTasks] = useReducer<Reducer<TaskStateType, TaskAction>>(tasksReducer,{
+    let todoLists = useSelector<AppRootStateType, Array<TodolistType>>(state => state.todolists)
+    let tasks = useSelector<AppRootStateType, TaskStateType>(state => state.tasks)
 
-        [TodolistId_1]: [
-            {id: v1(), title: "HTNL & CSS", isDone: true},
-            {id: v1(), title: "CSS & SCSS", isDone: true},
-            {id: v1(), title: "ES6/TS", isDone: false},
-            {id: v1(), title: "Redax", isDone: false}
-        ],
-        [TodolistId_2]: [
-            {id: v1(), title: "WATER", isDone: true},
-            {id: v1(), title: "BREAD", isDone: true},
-            {id: v1(), title: "SALT", isDone: false},
-            {id: v1(), title: "BEER", isDone: false}
-        ]
-    })
+    const dispatch = useDispatch()
+
     const [isDarkMode, setIsDarkMode] = useState<boolean>(true)
 
     const addTask = (title: string, todolistId: string) => {
-        dispatchTasks(addTaskAC(title,todolistId))
+        dispatch(addTaskAC(title, todolistId))
     }
     const remoteTask = (taskId: string, todolistId: string) => {
-        dispatchTasks(removeTaskAC(taskId,todolistId))
+        dispatch(removeTaskAC(taskId, todolistId))
     }
     const changeTaskStatus = (taskId: string, newIsDone: boolean, todolistId: string) => {
-        dispatchTasks(changeTaskStatusAC(taskId,newIsDone,todolistId))
+        dispatch(changeTaskStatusAC(taskId, newIsDone, todolistId))
     }
     const changeTaskTitle = (taskId: string, newTitle: string, todolistId: string) => {
-        dispatchTasks(changeTaskTitleAC(taskId,newTitle,todolistId))
+        dispatch(changeTaskTitleAC(taskId, newTitle, todolistId))
     }
 
 //todolist
     const changeTodoListFilter = (filter: FilterVuluesType, todolistId: string) => {
-        dicpatchToTodolists(ChangeTodoListFilterAC(filter,todolistId))
+        dispatch(ChangeTodoListFilterAC(filter, todolistId))
     }
     const changeTodoListTitle = (newTitle: string, todolistId: string) => {
-        dicpatchToTodolists(ChangeTodoListAC(newTitle,todolistId))
+        dispatch(ChangeTodoListAC(newTitle, todolistId))
     }
     const addTodolist = (title: string) => {
-        const action=AddTodoListAC(title)
-        dicpatchToTodolists(action)
-        dispatchTasks(action)
-
+        dispatch(AddTodoListAC(title))
     }
     const removeTodoLists = (todolistId: string) => {
-        const action=RemoveTodoListAC(todolistId)
-        dicpatchToTodolists(action)
-        dispatchTasks(action)
+        dispatch(RemoveTodoListAC(todolistId))
+
     }
 
     const getFiltredTaskForRender = (taskslist: Array<TaskType>, filterValue: FilterVuluesType) => {
@@ -172,7 +156,7 @@ function AppWithReducers(): JSX.Element {
                         <FormGroup>
                             <FormControlLabel
                                 control={<Checkbox onChange={(e) => setIsDarkMode(e.currentTarget.checked)}/>}
-                                label={isDarkMode ? "Dark mode off" : "Dark mode on" }
+                                label={isDarkMode ? "Dark mode off" : "Dark mode on"}
                             />
                         </FormGroup>
                         <Button color="inherit">Login</Button>
@@ -192,4 +176,4 @@ function AppWithReducers(): JSX.Element {
     )
 }
 
-export default AppWithReducers;
+export default AppWithRedux;
