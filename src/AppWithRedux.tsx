@@ -1,7 +1,6 @@
-import React, {Reducer, useReducer, useState} from 'react';
+import React, { useState} from 'react';
 import './App.css';
 import Todolist from "./Todolist";
-import {v1} from "uuid";
 import {AddItemForm} from "./AddItemForm";
 import {
     AppBar,
@@ -21,19 +20,18 @@ import {
     AddTodoListAC,
     ChangeTodoListAC,
     ChangeTodoListFilterAC, RemoveTodoListAC,
-    TodolistAction,
-    TodolistsReducer
+
 } from "./reducers/todolists-reducer";
 import {
     addTaskAC,
     changeTaskStatusAC,
     changeTaskTitleAC,
     removeTaskAC,
-    TaskAction,
-    tasksReducer
+
 } from "./reducers/tasks-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./reducers/store";
+import TodolistWithRedux from "./TodolistWithRedux";
 
 export type FilterVuluesType = "All" | "Active" | "Completed"
 export type TaskType = {
@@ -45,15 +43,12 @@ export type TodolistType = {
     id: string
     title: string
     filter: FilterVuluesType
-
 }
 export type TaskStateType = {
     [todolistId: string]: Array<TaskType>
 }
 
 function AppWithRedux(): JSX.Element {
-    const TodolistId_1 = v1()
-    const TodolistId_2 = v1()
 
     let todoLists = useSelector<AppRootStateType, Array<TodolistType>>(state => state.todolists)
     let tasks = useSelector<AppRootStateType, TaskStateType>(state => state.tasks)
@@ -89,7 +84,6 @@ function AppWithRedux(): JSX.Element {
         dispatch(RemoveTodoListAC(todolistId))
 
     }
-
     const getFiltredTaskForRender = (taskslist: Array<TaskType>, filterValue: FilterVuluesType) => {
         switch (filterValue) {
             case "Active":
@@ -100,14 +94,12 @@ function AppWithRedux(): JSX.Element {
                 return taskslist
         }
     }
-
-
     const todolistsComponents = todoLists.map(t => {
         let taskForRender: Array<TaskType> = getFiltredTaskForRender(tasks[t.id], t.filter)
         return (
             <Grid item>
                 <Paper elevation={8}>
-                    <Todolist
+                    <TodolistWithRedux
                         key={t.id}
                         todolistId={t.id}
                         filter={t.filter}
